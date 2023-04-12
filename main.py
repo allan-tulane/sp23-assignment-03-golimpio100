@@ -43,22 +43,22 @@ def parens_match_iterative(mylist):
     False
     """
     ### TODO
+    result = iterate(parens_update, 0, mylist)
+    return result == 0
     pass
 
 
 def parens_update(current_output, next_input):
-    """
-    This function will be passed to the `iterate` function to 
-    solve the balanced parenthesis problem.
     
-    Like all functions used by iterate, it takes in:
-    current_output....the cumulative output thus far (e.g., the running sum when doing addition)
-    next_input........the next value in the input
-    
-    Returns:
-      the updated value of `current_output`
-    """
     ###TODO
+    if current_output < 0:
+        return -1  # more closing parentheses than opening parentheses
+    elif next_input == '(':
+        return current_output + 1
+    elif next_input == ')':
+        return current_output - 1
+    else:
+        return current_output
     pass
 
 
@@ -88,6 +88,9 @@ def parens_match_scan(mylist):
     
     """
     ###TODO
+    mapped = map(paren_map, mylist)
+    result = reduce(min_f, 0, scan(lambda x,y: x+y, 0, mapped)[0])
+    return result == 0
     pass
 
 def scan(f, id_, a):
@@ -161,6 +164,24 @@ def parens_match_dc_helper(mylist):
       parens_match_dc to return the final True or False value
     """
     ###TODO
+    n = len(mylist)
+    if n == 0:
+        return (0, 0)
+    elif n == 1:
+        if mylist[0] == '(':
+            return (0, 1)
+        else:
+            return (1, 0)
+    else:
+        mid = n // 2
+        left = parens_match_dc_helper(mylist[:mid])
+        right = parens_match_dc_helper(mylist[mid:])
+        R1, L1 = left
+        R2, L2 = right
+        if L2 > R1:
+            return (R1 + L2 - R2, L1)
+        else:
+            return (R2, L2 + R1 - L1)
     pass
     
 
